@@ -1,0 +1,232 @@
+﻿@model ecommerce.ViewModels.MainProductsViewModel
+@{
+    ViewBag.Title = "Products";
+}
+
+<div class="content-push">
+
+    <div class="breadcrumb-box">
+        <a href="#">Home</a>
+        <a href="#">Bags &amp; Accessories</a>
+    </div>
+
+    <div class="information-blocks">
+        <div class="row">
+            <div class="col-md-9 col-md-push-3 col-sm-8 col-sm-push-4">
+                <div class="page-selector">
+                    <div class="pages-box hidden-xs">
+                        <a href="#" class="square-button active">1</a>
+                        <a href="#" class="square-button">2</a>
+                        <a href="#" class="square-button">3</a>
+                        <div class="divider">...</div>
+                        <a href="#" class="square-button"><i class="fa fa-angle-right"></i></a>
+                    </div>
+                    <div class="shop-grid-controls">
+                        <div class="entry">
+                            <div class="inline-text">Sorty by</div>
+                            <div class="simple-drop-down">
+                                <select>
+                                    <option>Position</option>
+                                    <option>Price</option>
+                                    <option>Category</option>
+                                    <option>Rating</option>
+                                    <option>Color</option>
+                                </select>
+                            </div>
+                            <div class="sort-button"></div>
+                        </div>
+                        <div class="entry">
+                            <div class="view-button active grid"><i class="fa fa-th"></i></div>
+                            <div class="view-button list"><i class="fa fa-list"></i></div>
+                        </div>
+                        <div class="entry">
+                            <div class="inline-text">Show</div>
+                            <div class="simple-drop-down" style="width: 75px;">
+                                <select>
+                                    <option>12</option>
+                                    <option>20</option>
+                                    <option>30</option>
+                                    <option>40</option>
+                                    <option>all</option>
+                                </select>
+                            </div>
+                            <div class="inline-text">per page</div>
+                        </div>
+                    </div>
+                    <div class="clear"></div>
+                </div>
+                <div class="row shop-grid grid-view" id="products">
+                    @foreach (var product in Model.Products)
+                    {
+                        var i = 0;
+                        <div class="col-md-3 col-sm-4 shop-grid-item">
+
+                            <div class="product-slide-entry shift-image">
+                                <div class="product-image">
+                                    @foreach (var fileDetail in product.FileDetails)
+                                    {
+                                        i++;
+                                        <img src="@Url.Content("~/Uploads/" + fileDetail.Id + fileDetail.Extension)"
+                                             alt="@fileDetail.FileName" />
+                                        if (i == 2)
+                                        {
+                                            break;
+                                        }
+                                    }
+                                    <div class="bottom-line left-attached">
+                                        <a class="bottom-line-a square"><i class="fa fa-shopping-cart"></i></a>
+                                        <a class="bottom-line-a square"><i class="fa fa-heart"></i></a>
+                                        <a class="bottom-line-a square"><i class="fa fa-retweet"></i></a>
+                                        <a class="bottom-line-a square"><i class="fa fa-expand"></i></a>
+                                    </div>
+                                </div>
+                                <a class="tag" href="@Url.Action("CategoryProducts", "Product", new {id = product.Category.CategoryId})">@product.Category.CategoryName</a>
+                                <a class="title" href="@Url.Action("Detail", "Product", new {id = product.ProductId})">@product.Name</a>
+                                <div class="rating-box">
+                                    <div class="star"><i class="fa fa-star"></i></div>
+                                    <div class="star"><i class="fa fa-star"></i></div>
+                                    <div class="star"><i class="fa fa-star"></i></div>
+                                    <div class="star"><i class="fa fa-star"></i></div>
+                                    <div class="star"><i class="fa fa-star"></i></div>
+                                    <div class="reviews-number">25 reviews</div>
+                                </div>
+                                <div class="article-container style-1">
+                                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, eiusmod tempor incididunt ut labore et dolore magna aliqua. Lorem ipsum dolor sit amet, consectetur adipiscing elit, eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+                                </div>
+                                <div class="price">
+                                    <div class="prev">@product.Price</div>
+                                    <div class="current">@product.FinalPrice</div>
+                                </div>
+                                <div class="list-buttons">
+                                    <a class="button style-10">Add to cart</a>
+                                    <a class="button style-11"><i class="fa fa-heart"></i> Add to Wishlist</a>
+                                </div>
+                            </div>
+
+                            <div class="clear"></div>
+                        </div>
+                    }
+                </div>
+                <div class="page-selector">
+                    <div class="description">Showing: 1-3 of 16</div>
+                    <div class="pages-box">
+                        <a href="#" class="square-button active">1</a>
+                        <a href="#" class="square-button">2</a>
+                        <a href="#" class="square-button">3</a>
+                        <div class="divider">...</div>
+                        <a href="#" class="square-button"><i class="fa fa-angle-right"></i></a>
+                    </div>
+                    <div class="clear"></div>
+                </div>
+            </div>
+            <div class="col-md-3 col-md-pull-9 col-sm-4 col-sm-pull-8 blog-sidebar">
+                <div class="information-blocks categories-border-wrapper">
+                    <div class="block-title size-3">Categories</div>
+                    <div class="accordeon">
+                        @foreach (var categoryType in Model.CategoryTypes)
+                        {
+                            <div class="accordeon-title">@categoryType.CategoryTypeName</div>
+                            <div class="accordeon-entry">
+                                <div class="article-container style-1">
+                                    <ul>
+                                        @foreach (var category in categoryType.Categories)
+                                        {
+                                            <li><a href="@Url.Action("CategoryProducts", "Product", new { id = category.CategoryId })">@category.CategoryName</a></li>
+                                        }
+                                    </ul>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+
+                <div class="information-blocks">
+                    <div class="block-title size-2">Sort by sizes</div>
+                    <div class="range-wrapper">
+                        <div id="prices-range"></div>
+                        <div class="range-price">
+                            Price:
+                            <div class="min-price"><b>&pound;<span>0</span></b></div>
+                            <b>-</b>
+                            <div class="max-price"><b>&pound;<span>200</span></b></div>
+                        </div>
+                        <a class="button style-14">filter</a>
+                    </div>
+                </div>
+
+                <div class="information-blocks">
+                    <div class="block-title size-2">Sort by sizes</div>
+                    <div class="size-selector">
+                        <div class="entry active">xs</div>
+                        <div class="entry">s</div>
+                        <div class="entry">m</div>
+                        <div class="entry">l</div>
+                        <div class="entry">xl</div>
+                        <div class="spacer"></div>
+                    </div>
+                </div>
+
+                <div class="information-blocks">
+                    <div class="block-title size-2">Sort by brands</div>
+                    <div class="row">
+                        <div class="col-xs-6">
+                            <label class="checkbox-entry">
+                                <input type="checkbox" /> <span class="check"></span> Armani
+                            </label>
+                            <label class="checkbox-entry">
+                                <input type="checkbox" /> <span class="check"></span> Bershka Co
+                            </label>
+                            <label class="checkbox-entry">
+                                <input type="checkbox" /> <span class="check"></span> Nelly.com
+                            </label>
+                            <label class="checkbox-entry">
+                                <input type="checkbox" /> <span class="check"></span> Zigzag Inc
+                            </label>
+                        </div>
+                        <div class="col-xs-6">
+                            <label class="checkbox-entry">
+                                <input type="checkbox" /> <span class="check"></span> Armani
+                            </label>
+                            <label class="checkbox-entry">
+                                <input type="checkbox" /> <span class="check"></span> Bershka Co
+                            </label>
+                            <label class="checkbox-entry">
+                                <input type="checkbox" /> <span class="check"></span> Nelly.com
+                            </label>
+                            <label class="checkbox-entry">
+                                <input type="checkbox" /> <span class="check"></span> Zigzag Inc
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="information-blocks">
+                    <div class="block-title size-2">Sort by colours</div>
+                    <div class="color-selector detail-info-entry">
+                        <div style="background-color: #cf5d5d;" class="entry active"></div>
+                        <div style="background-color: #c9459f;" class="entry"></div>
+                        <div style="background-color: #689dd4;" class="entry"></div>
+                        <div style="background-color: #68d4aa;" class="entry"></div>
+                        <div style="background-color: #a8d468;" class="entry"></div>
+                        <div style="background-color: #d4c368;" class="entry"></div>
+                        <div style="background-color: #c2c2c2;" class="entry"></div>
+                        <div style="background-color: #000000;" class="entry"></div>
+                        <div style="background-color: #f0f0f0;" class="entry"></div>
+                        <div class="spacer"></div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    @Html.Action("FeaturedItems", "Home")
+
+    <!-- FOOTER -->
+    @Html.Partial("_footer")
+</div>
+
+@section Scripts
+{
+    <script src="~/Scripts/jquery-ui.min.js"></script>
+}

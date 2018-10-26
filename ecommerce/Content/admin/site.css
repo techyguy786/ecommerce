@@ -1,0 +1,8 @@
+﻿
+span.field-validation-error {
+    color: red;
+}
+
+.error {
+    border-bottom: 1px solid #F00;
+}

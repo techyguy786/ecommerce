@@ -1,0 +1,49 @@
+﻿@model IEnumerable<ecommerce.Models.Product>
+
+@*@section owl
+    {
+        <link href="~/Content/owl.carousel.min.css" rel="stylesheet" />
+        <link href="~/Content/owl.theme.default.min.css" rel="stylesheet" />
+    }*@
+
+<div class="information-blocks">
+    <div class="row">
+        
+        <h3 class="block-title inline-product-column-title text-center">Featured products</h3>
+        @foreach (var product in Model)
+        {
+            var i = 0;
+            <div class="col-xs-12 col-sm-6 col-lg-4 information-entry">
+                <div class="inline-product-entry">
+                    @foreach (var fileDetail in product.FileDetails)
+                    {
+                        i++;
+                        <a href="#" class="image">
+                            <img alt="@fileDetail.FileName" src="@Url.Content("~/Uploads/" + fileDetail.Id + fileDetail.Extension)">
+                        </a>
+                        if (i == 1)
+                        {
+                            break;
+                        }
+                    }
+                    <div class="content">
+                        <div class="cell-view">
+                            <a href="@Url.Action("Detail", "Product", new {id = product.ProductId})" class="title">@product.Name</a>
+                            <div class="price">
+                                <div class="prev">@product.Price</div>
+                                <div class="current">@product.FinalPrice</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="clear"></div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+@*@section owljs
+{
+    <script src="~/Scripts/owl.carousel.min.js"></script>
+    <script src="~/Scripts/owl.autoplay.js"></script>
+}*@

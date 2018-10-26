@@ -1,0 +1,120 @@
+﻿@model ecommerce.ViewModels.CartItemsViewModel
+
+@{
+    ViewBag.Title = "Cart";
+    var i = 0;
+}
+
+<div class="content-push">
+
+<div class="breadcrumb-box">
+    <a href="#">Home</a>
+    <a href="#">Shop</a>
+    <a href="#">Shopping Cart</a>
+</div>
+
+<div class="information-blocks">
+    <div class="row">
+        <div class="col-sm-9 information-entry cartItems">
+            <h3 class="cart-column-title size-1">Products</h3>
+            @foreach (var item in Model.Items)
+            {
+                i++;
+                <div class="traditional-cart-entry style-1">
+                    <a class="image" href="#">
+                        <img alt="" src="~/Uploads/@item.ImageUrl">
+                    </a>
+                    <div class="content">
+                        <div class="cell-view">
+                            <a class="tag" href="#">@item.Product.Category.CategoryName</a>
+                            <a class="title" href="#">@item.Product.Name</a>
+                            @if (item.Product.Details.Length > 50)
+                            {
+                                <div class="inline-description">@item.Product.Details.Substring(0, 50)</div>
+                            }
+                            else
+                            {
+                                <div class="inline-description">@item.Product.Details</div>
+                            }
+                            <div class="price">
+                                <div id="prev_@i" data-price="@item.Product.Price" class="prev">$@(item.Product.Price * item.Count)</div>
+                                <div id="current_@i" data-fprice="@item.Product.FinalPrice" class="current">$@(item.Product.FinalPrice * item.Count)</div>
+                            </div>
+                            <div class="quantity-selector detail-info-entry">
+                                <div class="detail-info-entry-title">Quantity</div>
+                                <div class="entry number-minus">&nbsp;</div>
+                                <div id="count_@i" class="entry number">@item.Count</div>
+                                <div class="entry number-plus">&nbsp;</div>
+                                <a data-id="@item.ProductId" data-countId="@i" id="update_@i" class="button style-15" onclick="UpdateCart(this)">Update Cart</a>
+                                <a data-id="@item.ProductId" class="button style-17" onclick="RemoveCart(this)">remove</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+
+
+            <div class="row">
+                <div class="information-entry col-md-6">
+                    <div class="sale-entry">
+                        <div class="hot-mark red">hot</div>
+                        <div class="sale-price"><span>-40%</span> winter Sale</div>
+                        <div class="sale-description">Lorem ipsum dolor sit amet, consectetur adipisc elit, sed do</div>
+                    </div>
+                </div>
+                <div class="information-entry col-md-6">
+                    <div class="sale-entry">
+                        <div class="hot-mark red">hot</div>
+                        <div class="sale-price"><span>FREE</span> UK delivery</div>
+                        <div class="sale-description">Lorem ipsum dolor sit amet, consectetur adipisc elit, sed do</div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <div class="col-sm-3 information-entry">
+            <h3 class="cart-column-title size-1" style="text-align: center;">Subtotal</h3>
+            <div class="sidebar-subtotal">
+                <div class="price-data">
+                    <div id="cartTotal" class="main">$@Model.Sum</div>
+                    <div class="title">Excluding tax &amp; shipping</div>
+                    <div class="subtitle">ORDERS WILL BE PROCESSED IN USD</div>
+                </div>
+                <div class="additional-data">
+                    <div class="title"><span class="inline-label red">Promotion</span> Additional Notes</div>
+                    <textarea class="simple-field size-1"></textarea>
+                    <a href="@Url.Action("Checkout")" class="button style-10">Checkout</a>
+                </div>
+            </div>
+            <div class="block-title size-1">Get shipping estimates</div>
+            <form>
+                <label>Country</label>
+                <div class="simple-drop-down simple-field size-1">
+                    <select>
+                        <option>United States</option>
+                        <option>Great Britain</option>
+                        <option>Canada</option>
+                    </select>
+                </div>
+                <label>State</label>
+                <div class="simple-drop-down simple-field size-1">
+                    <select>
+                        <option>Alabama</option>
+                        <option>Alaska</option>
+                        <option>Idaho</option>
+                    </select>
+                </div>
+                <label>Zip Code</label>
+                <input type="text" value="" placeholder="Zip Code" class="simple-field size-1">
+                <div class="button style-16" style="display: block; margin-top: 10px;">calculate shipping<input type="submit" /></div>
+            </form>
+        </div>
+    </div>
+</div>
+
+    @Html.Action("FeaturedItems", "Home")
+
+
+    <!-- FOOTER -->
+    @Html.Partial("_footer")
+</div>

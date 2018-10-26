@@ -1,0 +1,32 @@
+﻿@model ecommerce.Models.CategoryType
+
+@{
+    ViewBag.Title = "DeleteCategoryType";
+}
+
+<h2>DeleteCategoryType</h2>
+
+<h3>Are you sure you want to delete this?</h3>
+<div>
+    <h4>CategoryType</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.CategoryTypeName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CategoryTypeName)
+        </dd>
+
+    </dl>
+
+    @using (Html.BeginForm()) {
+        @Html.AntiForgeryToken()
+
+        <div class="form-actions no-color">
+            <input type="submit" value="Delete" class="btn btn-default" /> |
+            @Html.ActionLink("Back to List", "CategoryTypes")
+        </div>
+    }
+</div>

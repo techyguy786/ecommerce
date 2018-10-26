@@ -1,0 +1,482 @@
+﻿@model ecommerce.ViewModels.CheckoutViewModel
+@{
+    ViewBag.Title = "Checkout";
+}
+
+<div class="content-push">
+
+    <div class="breadcrumb-box">
+        <a href="#">Home</a>
+        <a href="#">Checkout</a>
+    </div>
+
+    @Html.ValidationSummary(false, "", new { @class = "text-danger" })
+    <div class="information-blocks">
+        <div class="row">
+            <div class="col-sm-9 information-entry">
+                <div class="accordeon size-1">
+                    <div id="order" class="accordeon-title active">
+                        <span class="number">1</span>Order Review
+                        @*<div id="order-check">
+                                <i class="fa fa-check-circle" style="margin-right: 30px;float: right; font-size: 20px; color: green"></i>
+                            </div>*@
+                    </div>
+                    <div id="order-desc" class="accordeon-entry" style="display: block;">
+                        <div class="article-container style-1">
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th><label>SR#</label></th>
+                                        <th><label>Item</label></th>
+                                        <th><label>Brand</label></th>
+                                        <th><label>Image</label></th>
+                                        <th><label>Quantity</label></th>
+                                        <th><label>Unit Price</label></th>
+                                        <th><label>Items Total</label></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var item in Model.CartItems.Select((x, i) => new { Data = x, index = i + 1 }))
+                                    {
+                                        <tr>
+                                            <td>
+                                                @item.index
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(x => item.Data.Product.Name)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(x => item.Data.Product.BrandName)
+                                            </td>
+                                            <td>
+                                                <img src="~/Uploads/@item.Data.ImageUrl"
+                                                     style="height: 100px; width: 100px;"
+                                                     class="img-responsive" />
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(x => item.Data.Count)
+                                            </td>
+                                            <td>
+                                                $ @Html.DisplayFor(x => item.Data.Product.FinalPrice)
+                                            </td>
+                                            <td>
+                                                @{
+                                                    var ItemSum = item.Data.Count * item.Data.Product.FinalPrice;
+                                                }
+                                                <label>
+                                                    $ @ItemSum
+                                                </label>
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                            <div class="col-md-offset-10 col-md-2">
+                                Total Sum: <b>$@Model.Sum</b>
+                            </div>
+                            <hr />
+                            <div class="form-group">
+                                <div class="col-md-offset-2 col-md-10" style="margin-top: 15px;">
+                                    <button id="order-review" class="btn btn-primary pull-right">Continue</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    @using (Html.BeginForm("Checkout", "Cart", FormMethod.Post, new { id = "checkout-form" }))
+                    {
+                        @Html.AntiForgeryToken()
+                        <div class="form-horizontal">
+                            <div id="shipping" class="accordeon-title"><span class="number">2</span>Shipping Information</div>
+                            <div id="shipping-desc" class="accordeon-entry">
+                                <div class="article-container style-1">
+                                    <div class="form-group">
+                                        @Html.LabelFor(x => x.FirstName, new { @class = "control-label col-md-2" })
+                                        <div class="col-md-6">
+                                            @Html.TextBoxFor(x => x.FirstName, new { @class = "form-control" })
+                                            @Html.ValidationMessageFor(x => x.FirstName, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        @Html.LabelFor(x => x.LastName, new { @class = "control-label col-md-2" })
+                                        <div class="col-md-6">
+                                            @Html.TextBoxFor(x => x.LastName, new { @class = "form-control" })
+                                            @Html.ValidationMessageFor(x => x.LastName, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        @Html.LabelFor(x => x.Address, new { @class = "control-label col-md-2" })
+                                        <div class="col-md-6">
+                                            @Html.TextAreaFor(x => x.Address, 5, 20, new { @class = "form-control" })
+                                            @Html.ValidationMessageFor(x => x.Address, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        @Html.LabelFor(x => x.City, new { @class = "control-label col-md-2" })
+                                        <div class="col-md-6">
+                                            @Html.TextBoxFor(x => x.City, new { @class = "form-control" })
+                                            @Html.ValidationMessageFor(x => x.City, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        @Html.LabelFor(x => x.State, new { @class = "control-label col-md-2" })
+                                        <div class="col-md-6">
+                                            @Html.TextBoxFor(x => x.State, new { @class = "form-control" })
+                                            @Html.ValidationMessageFor(x => x.State, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        @Html.LabelFor(x => x.PostalCode, new { @class = "control-label col-md-2" })
+                                        <div class="col-md-6">
+                                            @Html.TextBoxFor(x => x.PostalCode, new { @class = "form-control" })
+                                            @Html.ValidationMessageFor(x => x.PostalCode, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        @Html.LabelFor(x => x.Country, new { @class = "control-label col-md-2" })
+                                        <div class="col-md-6">
+                                            @Html.TextBoxFor(x => x.Country, new { @class = "form-control" })
+                                            @Html.ValidationMessageFor(x => x.Country, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        @Html.LabelFor(x => x.Phone, new { @class = "control-label col-md-2" })
+                                        <div class="col-md-6">
+                                            @Html.TextBoxFor(x => x.Phone, new { @class = "form-control" })
+                                            @Html.ValidationMessageFor(x => x.Phone, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        @Html.LabelFor(x => x.Email, new { @class = "control-label col-md-2" })
+                                        <div class="col-md-6">
+                                            @Html.TextBoxFor(x => x.Email, new { @class = "form-control" })
+                                            @Html.ValidationMessageFor(x => x.Email, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="col-md-offset-2 col-md-6">
+                                            <button id="shippingbtn" type="button" class="btn btn-primary pull-right">Continue</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div id="payment" class="accordeon-title"><span class="number">3</span>Payment Information</div>
+                            <div id="payment-desc" class="accordeon-entry">
+                                <div class="article-container style-1">
+                                    <div class="form-group">
+                                        @Html.LabelFor(x => x.CardNumber, new { @class = "control-label col-md-2" })
+                                        <div class="col-md-6">
+                                            <input class="form-control" type="text" maxlength="20" name="CardNumber" />
+                                            @Html.ValidationMessageFor(x => x.CardNumber, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        @Html.LabelFor(x => x.Cvv, new { @class = "control-label col-md-2" })
+                                        <div class="col-md-6">
+                                            <input class="form-control" type="text" maxlength="4" name="Cvv" />
+                                            @Html.ValidationMessageFor(x => x.Cvv, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="control-label col-md-2">Expiration (MM/YYYY)</label>
+                                        <div class="col-md-6">
+                                            <div class="col-md-6">
+                                                <input class="form-control" type="text" maxlength="2" name="Month" />
+                                            </div>
+                                            <div class="col-md-6">
+                                                <input class="form-control" type="text" maxlength="4" name="Year" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="col-md-offset-8 col-md-2">
+                                            <button id="paymentbtn" type="button" class="btn btn-primary pull-right">Continue</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group" style="margin-top: 30px;">
+                            <div class="col-md-offset-2 col-md-10">
+                                <button type="submit" class="btn btn-primary pull-right">Continue</button>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+            <div class="col-sm-3 information-entry">
+                <h3 class="cart-column-title size-2">Your Checkout Progress</h3>
+                <div class="checkout-progress-widget">
+                    <div class="step-entry">
+                        1. Checkout Method
+                        <div id="ck" class="hide">
+                            <i class="fa fa-check-circle" style="float: right; font-size: 20px; color: green"></i>
+                        </div>
+                    </div>
+                    <div class="step-entry">
+                        2. Billing Address
+                    </div>
+                    <div class="step-entry">
+                        3. Shipping Address
+                    </div>
+                    <div class="step-entry">
+                        4. Shipping Method
+                    </div>
+                    <div class="step-entry">
+                        5. Payment Method
+                    </div>
+                </div>
+                <div class="article-container style-1">
+                    <p>Custom CMS block displayed below the one page checkout progress block. Put your own content here.</p>
+                </div>
+                <div class="information-blocks">
+                    <a class="sale-entry vertical" href="#">
+                        <span class="hot-mark yellow">hot</span>
+                        <span class="sale-price"><span>-40%</span> Valentine <br /> Underwear Sale</span>
+                        <span class="sale-description">Lorem ipsum dolor sitamet, conse adipisc sed do eiusmod tempor.</span>
+                        <img style="" class="sale-image" src="~/images/site/text-widget-image-3.jpg" alt="" />
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="information-blocks">
+        <div class="row">
+            <div class="col-sm-4 information-entry">
+                <h3 class="block-title inline-product-column-title">Featured products</h3>
+                <div class="inline-product-entry">
+                    <a href="#" class="image"><img alt="" src="~/images/site/product-image-inline-1.jpg"></a>
+                    <div class="content">
+                        <div class="cell-view">
+                            <a href="#" class="title">Ladies Pullover Batwing Sleeve Zigzag</a>
+                            <div class="price">
+                                <div class="prev">$199,99</div>
+                                <div class="current">$119,99</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="clear"></div>
+                </div>
+
+                <div class="inline-product-entry">
+                    <a href="#" class="image"><img alt="" src="~/images/site/product-image-inline-2.jpg"></a>
+                    <div class="content">
+                        <div class="cell-view">
+                            <a href="#" class="title">Ladies Pullover Batwing Sleeve Zigzag</a>
+                            <div class="price">
+                                <div class="prev">$199,99</div>
+                                <div class="current">$119,99</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="clear"></div>
+                </div>
+
+                <div class="inline-product-entry">
+                    <a href="#" class="image"><img alt="" src="~/images/site/product-image-inline-3.jpg"></a>
+                    <div class="content">
+                        <div class="cell-view">
+                            <a href="#" class="title">Ladies Pullover Batwing Sleeve Zigzag</a>
+                            <div class="price">
+                                <div class="prev">$199,99</div>
+                                <div class="current">$119,99</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="clear"></div>
+                </div>
+            </div>
+            <div class="col-sm-4 information-entry">
+                <h3 class="block-title inline-product-column-title">Featured products</h3>
+                <div class="inline-product-entry">
+                    <a href="#" class="image"><img alt="" src="~/images/site/product-image-inline-1.jpg"></a>
+                    <div class="content">
+                        <div class="cell-view">
+                            <a href="#" class="title">Ladies Pullover Batwing Sleeve Zigzag</a>
+                            <div class="price">
+                                <div class="prev">$199,99</div>
+                                <div class="current">$119,99</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="clear"></div>
+                </div>
+
+                <div class="inline-product-entry">
+                    <a href="#" class="image"><img alt="" src="~/images/site/product-image-inline-2.jpg"></a>
+                    <div class="content">
+                        <div class="cell-view">
+                            <a href="#" class="title">Ladies Pullover Batwing Sleeve Zigzag</a>
+                            <div class="price">
+                                <div class="prev">$199,99</div>
+                                <div class="current">$119,99</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="clear"></div>
+                </div>
+
+                <div class="inline-product-entry">
+                    <a href="#" class="image"><img alt="" src="~/images/site/product-image-inline-3.jpg"></a>
+                    <div class="content">
+                        <div class="cell-view">
+                            <a href="#" class="title">Ladies Pullover Batwing Sleeve Zigzag</a>
+                            <div class="price">
+                                <div class="prev">$199,99</div>
+                                <div class="current">$119,99</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="clear"></div>
+                </div>
+            </div>
+            <div class="col-sm-4 information-entry">
+                <h3 class="block-title inline-product-column-title">Featured products</h3>
+                <div class="inline-product-entry">
+                    <a href="#" class="image"><img alt="" src="~/images/site/product-image-inline-1.jpg"></a>
+                    <div class="content">
+                        <div class="cell-view">
+                            <a href="#" class="title">Ladies Pullover Batwing Sleeve Zigzag</a>
+                            <div class="price">
+                                <div class="prev">$199,99</div>
+                                <div class="current">$119,99</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="clear"></div>
+                </div>
+
+                <div class="inline-product-entry">
+                    <a href="#" class="image"><img alt="" src="~/images/site/product-image-inline-2.jpg"></a>
+                    <div class="content">
+                        <div class="cell-view">
+                            <a href="#" class="title">Ladies Pullover Batwing Sleeve Zigzag</a>
+                            <div class="price">
+                                <div class="prev">$199,99</div>
+                                <div class="current">$119,99</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="clear"></div>
+                </div>
+
+                <div class="inline-product-entry">
+                    <a href="#" class="image"><img alt="" src="~/images/site/product-image-inline-3.jpg"></a>
+                    <div class="content">
+                        <div class="cell-view">
+                            <a href="#" class="title">Ladies Pullover Batwing Sleeve Zigzag</a>
+                            <div class="price">
+                                <div class="prev">$199,99</div>
+                                <div class="current">$119,99</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="clear"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- FOOTER -->
+    <div class="footer-wrapper style-10">
+        <footer class="type-1">
+            <div class="footer-columns-entry">
+                <div class="row">
+                    <div class="col-md-3">
+                        <img class="footer-logo" src="~/images/site/logo-9.png" alt="" />
+                        <div class="footer-description">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod.</div>
+                        <div class="footer-address">
+                            30 South Avenue San Francisco<br />
+                            Phone: +78 123 456 789<br />
+                            Email: <a href="mailto:Support@blanco.com">Support@blanco.com</a><br />
+                            <a href="https://www.8theme.com/index.php"><b>www.inmedio.com</b></a>
+                        </div>
+                        <div class="clear"></div>
+                    </div>
+                    <div class="col-md-2 col-sm-4">
+                        <h3 class="column-title">Our Services</h3>
+                        <ul class="column">
+                            <li><a href="#">About us</a></li>
+                            <li><a href="#">Order History</a></li>
+                            <li><a href="#">Returns</a></li>
+                            <li><a href="#">Custom Service</a></li>
+                            <li><a href="#">Terms &amp; Condition</a></li>
+                            <li><a href="#">Order History</a></li>
+                            <li><a href="#">Returns</a></li>
+                        </ul>
+                        <div class="clear"></div>
+                    </div>
+                    <div class="col-md-2 col-sm-4">
+                        <h3 class="column-title">Our Services</h3>
+                        <ul class="column">
+                            <li><a href="#">About us</a></li>
+                            <li><a href="#">Order History</a></li>
+                            <li><a href="#">Returns</a></li>
+                            <li><a href="#">Custom Service</a></li>
+                            <li><a href="#">Terms &amp; Condition</a></li>
+                            <li><a href="#">Order History</a></li>
+                            <li><a href="#">Returns</a></li>
+                        </ul>
+                        <div class="clear"></div>
+                    </div>
+                    <div class="col-md-2 col-sm-4">
+                        <h3 class="column-title">Our Services</h3>
+                        <ul class="column">
+                            <li><a href="#">About us</a></li>
+                            <li><a href="#">Order History</a></li>
+                            <li><a href="#">Returns</a></li>
+                            <li><a href="#">Custom Service</a></li>
+                            <li><a href="#">Terms &amp; Condition</a></li>
+                            <li><a href="#">Order History</a></li>
+                            <li><a href="#">Returns</a></li>
+                        </ul>
+                        <div class="clear"></div>
+                    </div>
+                    <div class="clearfix visible-sm-block"></div>
+                    <div class="col-md-3">
+                        <h3 class="column-title">Company working hours</h3>
+                        <div class="footer-description">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod.</div>
+                        <div class="footer-description">
+                            <b>Monday-Friday:</b> 8.30 a.m. - 5.30 p.m.<br />
+                            <b>Saturday:</b> 9.00 a.m. - 2.00 p.m.<br />
+                            <b>Sunday:</b> Closed
+                        </div>
+                        <div class="clear"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom-navigation">
+                <div class="cell-view">
+                    <div class="footer-links">
+                        <a href="#">Site Map</a>
+                        <a href="#">Search</a>
+                        <a href="#">Terms</a>
+                        <a href="#">Advanced Search</a>
+                        <a href="#">Orders and Returns</a>
+                        <a href="#">Contact Us</a>
+                    </div>
+                    <div class="copyright">Created with by <a href="#">8theme</a>. All right reserved</div>
+                </div>
+                <div class="cell-view">
+                    <div class="payment-methods">
+                        <a href="#"><img src="~/images/site/payment-method-1.png" alt="" /></a>
+                        <a href="#"><img src="~/images/site/payment-method-2.png" alt="" /></a>
+                        <a href="#"><img src="~/images/site/payment-method-3.png" alt="" /></a>
+                        <a href="#"><img src="~/images/site/payment-method-4.png" alt="" /></a>
+                        <a href="#"><img src="~/images/site/payment-method-5.png" alt="" /></a>
+                        <a href="#"><img src="~/images/site/payment-method-6.png" alt="" /></a>
+                    </div>
+                </div>
+            </div>
+        </footer>
+    </div>
+</div>
+
+
+@section Scripts{
+    <script>
+        var userAuthorized = @User.Identity.IsAuthenticated.ToString().ToLower();
+    </script>
+    <script src="~/Scripts/app/checkout.js"></script>
+    @Scripts.Render("~/bundles/jqueryval")
+}

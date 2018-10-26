@@ -1,0 +1,53 @@
+﻿@model ecommerce.ViewModels.CartItemsViewModel
+
+@if (Model.Items != null)
+{
+    var i = 0;
+    foreach (var item in Model.Items)
+    {
+        i++;
+        <div class="cart-entry">
+            <a class="image">
+                <img style="height: 50px; width: 100%; display: block;"
+                     src="@Url.Content("~/Uploads/" + item.ImageUrl)"
+                     alt="" />
+            </a>
+            <div class="content">
+                <a class="title" href="@Url.Action("Detail", "Product", new { id = item.Product.ProductId })">
+                    @item.Product.Name
+                </a>
+                <div class="quantity">
+                    Quantity: @item.Count
+                </div>
+                <div class="price">
+                    $@(item.Product.FinalPrice * item.Count)
+                </div>
+            </div>
+            <div class="button-x" data-id="@item.Product.ProductId" onclick="RemoveNotif(this)">
+                <i class="fa fa-close"></i>
+            </div>
+        </div>
+        if (i == 3)
+        {
+            break;
+        }
+    }
+}
+
+<div class="summary">
+    <div class="subtotal">Product Items: @Model.Items.Count()</div>
+    <div class="grandtotal">
+        Grand Total $<span>@Model.Sum</span>
+    </div>
+</div>
+<div class="cart-buttons">
+    <div class="column">
+        <a href="@Url.Action("Index", "Cart")" class="button style-3">view cart</a>
+        <div class="clear"></div>
+    </div>
+    <div class="column">
+        <a href="@Url.Action("Checkout", "Cart")" class="button style-4">checkout</a>
+        <div class="clear"></div>
+    </div>
+    <div class="clear"></div>
+</div>

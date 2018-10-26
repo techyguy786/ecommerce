@@ -1,0 +1,159 @@
+﻿@model ecommerce.ViewModels.ProductViewModel
+@{
+    ViewBag.Title = "Add";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+@section styles {
+<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+}
+
+<div class="sb2-2-2">
+    <ul>
+        <li>
+            <a href="@Url.Action("Index")"><i class="fa fa-home" aria-hidden="true"></i> Home</a>
+        </li>
+        <li class="active-bre">
+            <a href="#"> Add Product</a>
+        </li>
+    </ul>
+</div>
+<div class="sb2-2-add-blog sb2-2-1">
+    <div class="box-inn-sp">
+        <div class="inn-title">
+            <h4>Add Product</h4>
+            <p>Add the Product Relevant to the Categories</p>
+        </div>
+        <div class="bor">
+            @using (Html.BeginForm("AddProduct", "Product", FormMethod.Post,
+                        new { enctype = "multipart/form-data" }))
+            {
+                @Html.AntiForgeryToken()
+                <div class="row">
+                    <div class="input-field col s12">
+                        @Html.TextBoxFor(x => x.Product.Name, new { @class = "validate", type = "text" })
+                        @Html.LabelFor(x => x.Product.Name)
+                        @Html.ValidationMessageFor(x => x.Product.Name)
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="input-field col s12">
+                        @Html.TextBoxFor(x => x.Product.BrandName, new { @class = "validate", type = "text" })
+                        @Html.LabelFor(x => x.Product.BrandName)
+                        @Html.ValidationMessageFor(x => x.Product.BrandName)
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="input-field col s12">
+                        @Html.DropDownListFor(x => x.CategoryTypeId, new SelectList(Model.CategoryTypes, "CategoryTypeId", "CategoryTypeName"),
+                            "Select Category Type", new { id = "categoryTypeId" })
+                        @Html.LabelFor(x => x.CategoryTypeId)
+                        @Html.ValidationMessageFor(x => x.CategoryTypeId)
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="input-field col s12">
+                        @Html.DropDownListFor(x => x.CategoryId, new SelectList(Model.Categories, "CategoryId", "CategoryName"),
+                            "Select Category", new { id = "categoryId", style="display: block;" })
+                        @Html.LabelFor(x => x.Product.CategoryId)
+                        @Html.ValidationMessageFor(x => x.Product.CategoryId)
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="input-field col s12">
+                        @Html.EnumDropDownListFor(x => x.Product.Gender,
+                            "Select Gender", null)
+                        @Html.LabelFor(x => x.Product.Gender)
+                        @Html.ValidationMessageFor(x => x.Product.Gender)
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col s12">
+                        <input type="checkbox" id="scheduled" name="Scheduled" value="true" />
+                        <input type="hidden" name="Scheduled" value="false" />
+                        <label for="scheduled">Scheduled</label>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="input-field col s12">
+                        <input name="Date" type="text" id="datepicker" placeholder="Scheduled Date"/>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="input-field col s12">
+                        @Html.TextBoxFor(x => x.Product.Price,
+                                               new
+                                               {
+                                                   @class = "validate",
+                                                   id = "price",
+                                                   type = "text"
+                                               })
+                        @Html.LabelFor(x => x.Product.Price)
+                        @Html.ValidationMessageFor(x => x.Product.Price)
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="input-field col s12">
+                        @Html.TextBoxFor(x => x.Product.DiscountPercentage, new { @class = "validate", id = "percentage", type = "text", placeholder = "25" })
+                        @Html.LabelFor(x => x.Product.DiscountPercentage)
+                        @Html.ValidationMessageFor(x => x.Product.DiscountPercentage)
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="input-field col s12">
+                        @Html.TextBoxFor(x => x.Product.FinalPrice, new { @class = "validate", id = "fprice", type = "number", @readonly = "true" })
+                        @Html.LabelFor(x => x.Product.FinalPrice)
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="input-field col s12">
+                        @Html.TextBoxFor(x => x.Product.Quantity, new { @class = "validate", type = "number" })
+                        @Html.LabelFor(x => x.Product.Quantity)
+                        @Html.ValidationMessageFor(x => x.Product.Quantity)
+                    </div>
+                </div>
+                <div class="row" id="picHolder">
+                    <div class="col s12">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="input-field col s12">
+                        <div class="file-field">
+                            <div class="btn">
+                                <span>File</span>
+                                <input type="file" name="file" id="file" multiple="multiple" onchange="show(this)">
+                            </div>
+                            <div class="file-path-wrapper">
+                                <input class="file-path validate" type="text" placeholder="Upload Product Image">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col s12">
+                        @Html.CheckBoxFor(x => x.Product.Featured, new { @class = "checkbox" })
+                        @Html.LabelFor(x => x.Product.Featured)
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col s12">
+                        @Html.LabelFor(x => x.Product.Details)
+                        @Html.TextAreaFor(x => x.Product.Details, 10, 40, new { @class = "validate", type = "text" })
+                        @Html.ValidationMessageFor(x => x.Product.Details)
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="input-field col s12">
+                        <input type="submit" class="waves-effect waves-light btn-large" value="Submit">
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+@section scripts1{
+    @Scripts.Render("~/bundles/jqueryval")
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <script src="~/Areas/Admin/Scripts/script.js"></script>
+}

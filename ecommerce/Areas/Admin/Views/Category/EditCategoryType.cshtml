@@ -1,0 +1,46 @@
+﻿@model ecommerce.Models.CategoryType
+@{
+    ViewBag.Title = "Add";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+<div class="sb2-2-2">
+    <ul>
+        <li>
+            <a href="@Url.Action("Index", "Main")"><i class="fa fa-home" aria-hidden="true"></i> Home</a>
+        </li>
+        <li class="active-bre">
+            <a href="#"> Edit Category Types</a>
+        </li>
+    </ul>
+</div>
+<div class="sb2-2-add-blog sb2-2-1">
+    <div class="box-inn-sp">
+        <div class="inn-title">
+            <h4>Edit Category Types</h4>
+            <p>Add the Category Types to Classify the Different Kinds of Categories.</p>
+        </div>
+        <div class="bor">
+            <form action="@Url.Action("EditCategoryType")" method="post">
+                @Html.HiddenFor(x => x.CategoryTypeId)
+                @Html.AntiForgeryToken()
+                <div class="row">
+                    <div class="input-field col s12">
+                        @Html.EditorFor(x => x.CategoryTypeName, new { @class = "validate", type = "text" })
+                        @Html.LabelFor(x => x.CategoryTypeName)
+                        @Html.ValidationMessageFor(x => x.CategoryTypeName)
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="input-field col s12">
+                        <input type="submit" class="waves-effect waves-light btn-large" value="Submit">
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section scripts1{
+    @Scripts.Render("~/bundles/jqueryval")
+}

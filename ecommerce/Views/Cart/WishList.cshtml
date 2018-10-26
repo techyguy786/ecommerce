@@ -1,0 +1,83 @@
+﻿@model IEnumerable<ecommerce.Models.WishList>
+
+@{
+    ViewBag.Title = "WishList";
+    var i = 0;
+}
+
+<div class="content-push">
+
+    <div class="breadcrumb-box">
+        <a href="#">Home</a>
+        <a href="#">Shop</a>
+        <a href="#">Shopping Cart</a>
+    </div>
+
+    <div class="information-blocks">
+        <div class="row">
+            <div class="col-sm-9 information-entry wishItems">
+                <h3 class="cart-column-title size-1">Products</h3>
+                @foreach (var item in Model)
+                {
+                    i++;
+                    <div class="traditional-cart-entry style-1">
+                        <a class="image" href="#">
+                            <img alt="" src="~/Uploads/@item.ImageUrl">
+                        </a>
+                        <div class="content">
+                            <div class="cell-view">
+                                <a class="tag" href="#">@item.Product.Category.CategoryName</a>
+                                <a class="title" href="#">@item.Product.Name</a>
+                                @if (item.Product.Details.Length > 50)
+                                {
+                                    <div class="inline-description">@item.Product.Details.Substring(0, 50)</div>
+                                }
+                                else
+                                {
+                                    <div class="inline-description">@item.Product.Details</div>
+                                }
+                                <div class="price">
+                                    <div data-price="@item.Product.Price" class="prev">$@item.Product.Price</div>
+                                    <div data-fprice="@item.Product.FinalPrice" class="current">$@item.Product.FinalPrice</div>
+                                </div>
+                                <div class="quantity-selector detail-info-entry">
+                                    <div class="detail-info-entry-title">Quantity</div>
+                                    <div class="entry number-minus">&nbsp;</div>
+                                    <div id="quantity_@i" class="entry number">10</div>
+                                    <div class="entry number-plus">&nbsp;</div>
+                                    <a data-pid="@item.ProductId" data-id="@i" class="button style-17" onclick="AddWishItemInCart(this)">Add To Cart</a>
+                                    <a data-pid="@item.ProductId" class="button style-17" onclick="RemoveWishItem(this)">Remove WishList</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+
+
+                <div class="row">
+                    <div class="information-entry col-md-6">
+                        <div class="sale-entry">
+                            <div class="hot-mark red">hot</div>
+                            <div class="sale-price"><span>-40%</span> winter Sale</div>
+                            <div class="sale-description">Lorem ipsum dolor sit amet, consectetur adipisc elit, sed do</div>
+                        </div>
+                    </div>
+                    <div class="information-entry col-md-6">
+                        <div class="sale-entry">
+                            <div class="hot-mark red">hot</div>
+                            <div class="sale-price"><span>FREE</span> UK delivery</div>
+                            <div class="sale-description">Lorem ipsum dolor sit amet, consectetur adipisc elit, sed do</div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    @Html.Action("FeaturedItems", "Home")
+
+
+    <!-- FOOTER -->
+    @Html.Partial("_footer")
+</div>

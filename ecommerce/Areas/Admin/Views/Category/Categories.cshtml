@@ -1,0 +1,75 @@
+﻿@model IEnumerable<ecommerce.Models.Category>
+@{
+    ViewBag.Title = "Categories";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+<div class="sb2-2-2">
+    <ul>
+        <li>
+            <a href="#"><i class="fa fa-home" aria-hidden="true"></i> Home</a>
+        </li>
+        <li class="active-bre">
+            <a href="#"> Ui Form</a>
+        </li>
+    </ul>
+</div>
+
+<div class="sb2-2-3">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="box-inn-sp">
+                <div class="inn-title">
+                    <h4>Add Category</h4>
+                    <p>Now Add the Categories Relevant to the Major Categories</p>
+                    <a class="dropdown-button drop-down-meta" href="#" data-activates="dr-users"><i class="material-icons">more_vert</i></a>
+                    <ul id="dr-users" class="dropdown-content">
+                        <li>
+                            <a href="@Url.Action("AddCategories")">Add New</a>
+                        </li>
+                    </ul>
+
+                    <!-- Dropdown Structure -->
+
+                </div>
+                <div class="tab-inn">
+                    <div class="table-responsive table-desi">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th><label>SR#</label></th>
+                                    <th>@Html.LabelFor(x => Model.First().CategoryName)</th>
+                                    <th><label>Category Type</label></th>
+                                    <th><label>Edit</label></th>
+                                    <th><label>Delete</label></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var category in Model.Select((x, i) => new { Data = x, Index = i + 1 }))
+                                {
+                                <tr>
+                                    <td>
+                                        @category.Index
+                                    </td>
+                                    <td>
+                                        <a href="#"><span class="list-enq-name">@Html.DisplayFor(x => category.Data.CategoryName)</span></a>
+                                    </td>
+                                    <td>
+                                        <a href="#"><span class="list-enq-name">@Html.DisplayFor(x => category.Data.Type.CategoryTypeName)</span></a>
+                                    </td>
+                                    <td>
+                                        <a href="@Url.Action("EditCategory", new { id = category.Data.CategoryId })"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>
+                                    </td>
+                                    <td>
+                                        <a href="@Url.Action("DeleteCategory", new { id = category.Data.CategoryId })"><i class="fa fa-trash-o" aria-hidden="true"></i></a>
+                                    </td>
+                                </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
